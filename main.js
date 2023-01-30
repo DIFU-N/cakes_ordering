@@ -1,5 +1,6 @@
 const redux = require('redux');
 const createStore = redux.createStore;
+const bindActionCreators = redux.bindActionCreators;
 
 const cakeOrdered = 'Cake Ordered';
 const cakeRestocked = 'Cake Restocked';
@@ -89,17 +90,26 @@ store.subscribe(() => console.log('update state', store.getState()))
 
 // Dispatch method accepts a function as a parameter, create the fxn there or 
 //use an already created one, there is a created one in this case
-store.dispatch(orderCake())
+// store.dispatch(orderCake())
 //to cause more state changes:
-store.dispatch(orderCake())
-store.dispatch(orderCake())
+// store.dispatch(orderCake())
+// store.dispatch(orderCake())
 
 
 //restocking the cakes
-store.dispatch(restockCake(cakesSold));
+// store.dispatch(restockCake(cakesSold));
 
 // for the unsubscribe method, just call the function that is returned from the subscribe method 
 const unsubscribe = store.subscribe(() => console.log('update state', store.getState()))
 
 unsubscribe();
+
+// Bind Action Creators Fxn = A helper fxn that redux provides
+// It is an alternative for the dispatch fxn 
+// bindActionCreators(action creators, and what you want to bind it to) 
+const actions = bindActionCreators({ orderCake, restockCake }, store.dispatch)
+actions.orderCake();
+actions.orderCake();
+actions.orderCake();
+actions.restockCake(cakesSold);
 
