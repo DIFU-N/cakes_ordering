@@ -2,15 +2,25 @@ const redux = require('redux');
 const createStore = redux.createStore;
 
 const cakeOrdered = 'Cake Ordered';
+const cakeRestocked = 'Cake Restocked';
 
+let cakesSold = 0;
 //to implement an action, an action creator needs to be created.
 // JS APP - Action - Reducer - State
 
 //Action Implemented
 const orderCake = () => {
+    cakesSold +=1;
     return {
         type: cakeOrdered,
-        quantity: 1
+        payload: 1
+    }
+}
+
+const restockCake = (qty = 1) => {
+    return {
+        type: cakeRestocked,
+        payload: qty
     }
 }
 
@@ -25,6 +35,11 @@ const reducer = (state = initialState, action) => {
         case cakeOrdered:
             return { 
                 numOfCakes: state.numOfCakes - 1
+            }
+        case cakeRestocked:
+            return {
+                ...state,
+                numOfCakes: state.numOfCakes + action.payload
             }
         default: 
             return state;
@@ -78,6 +93,10 @@ store.dispatch(orderCake())
 //to cause more state changes:
 store.dispatch(orderCake())
 store.dispatch(orderCake())
+
+
+//restocking the cakes
+store.dispatch(restockCake(cakesSold));
 
 // for the unsubscribe method, just call the function that is returned from the subscribe method 
 const unsubscribe = store.subscribe(() => console.log('update state', store.getState()))
