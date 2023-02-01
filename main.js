@@ -1,6 +1,7 @@
 const redux = require('redux');
 const createStore = redux.createStore;
 const bindActionCreators = redux.bindActionCreators;
+const combineReducers = redux.combineReducers;
 
 const cakeOrdered = 'Cake Ordered';
 const cakeRestocked = 'Cake Restocked';
@@ -43,13 +44,52 @@ const restockIceCream = (qty = 1) => {
     }
 }
 
-const initialState = {
+// const initialState = {
+//     numOfCakes: 10,
+//     numOfIceCreams: 20,
+// }
+
+const initialCakeState = {
     numOfCakes: 10,
+}
+
+const initialIceCreamState = {
     numOfIceCreams: 20,
 }
+
 // Reducers Update the current state of the application.
 // Reducer Implemented
-const reducer = (state = initialState, action) => {
+ 
+// 1 reducer still
+// const reducer = (state = initialState, action) => {
+//     switch (action.type) {
+//         case cakeOrdered:
+//             return { 
+//                 ...state,
+//                 numOfCakes: state.numOfCakes - 1
+//             }
+//         case cakeRestocked:
+//             return {
+//                 ...state,
+//                 numOfCakes: state.numOfCakes + action.payload
+//             }
+//         case iceCreamOrdered:
+//             return { 
+//                 ...state,
+//                 numOfIceCreams: state.numOfIceCreams - action.payload
+//             }
+//         case iceCreamRestocked:
+//             return {
+//                 ...state,
+//                 numOfIceCreams: state.numOfIceCreams + action.payload
+//             }
+//         default: 
+//             return state;
+//     }
+// }
+
+// separating the reducers into 2
+const cakeReducer = (state = initialCakeState, action) => {
     switch (action.type) {
         case cakeOrdered:
             return { 
@@ -61,6 +101,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 numOfCakes: state.numOfCakes + action.payload
             }
+        default: 
+            return state;
+    }
+}
+
+const iceCreamReducer = (state = initialIceCreamState, action) => {
+    switch (action.type) {
         case iceCreamOrdered:
             return { 
                 ...state,
@@ -107,8 +154,16 @@ const reducer2 = (state = initialState, action) => {
 //Register listeners via subscribe(listener)
 // Handle unrregistering of listeners via the fxn returned by subscribe(listener)
 
+const rootReducer = combineReducers({
+    cake: cakeReducer,
+    iceCream: iceCreamReducer
+})
+
 // Hold App State
-const store = createStore(reducer);
+// const store = createStore(reducer);
+
+//Hold Multpile Reducers Baby.. We got the club going crazy.. all eyes on you
+const store = createStore(rootReducer);
 
 // Allow access to state 
 console.log('Initial State', store.getState());
