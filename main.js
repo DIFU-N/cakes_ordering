@@ -4,8 +4,11 @@ const bindActionCreators = redux.bindActionCreators;
 
 const cakeOrdered = 'Cake Ordered';
 const cakeRestocked = 'Cake Restocked';
+const iceCreamOrdered = 'Ice Cream Ordered';
+const iceCreamRestocked = 'Ice Cream Restocked';
 
-let cakesSold = 0;
+let cakesSold = 0,
+    iceCreamSold = 0;
 //to implement an action, an action creator needs to be created.
 // JS APP - Action - Reducer - State
 
@@ -18,29 +21,55 @@ const orderCake = () => {
     }
 }
 
-const restockCake = (qty = 1) => {
+const restockCake = (qty) => {
     return {
         type: cakeRestocked,
         payload: qty
     }
 }
 
-const initialState = {
-    numOfCakes: 10
+const orderIceCream = (qty) => {
+    iceCreamSold = qty;
+    return {
+        type: iceCreamOrdered,
+        payload: qty
+    }
 }
 
+const restockIceCream = (qty = 1) => {
+    return {
+        type: iceCreamRestocked,
+        payload: qty
+    }
+}
+
+const initialState = {
+    numOfCakes: 10,
+    numOfIceCreams: 20,
+}
 // Reducers Update the current state of the application.
 // Reducer Implemented
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case cakeOrdered:
             return { 
+                ...state,
                 numOfCakes: state.numOfCakes - 1
             }
         case cakeRestocked:
             return {
                 ...state,
                 numOfCakes: state.numOfCakes + action.payload
+            }
+        case iceCreamOrdered:
+            return { 
+                ...state,
+                numOfIceCreams: state.numOfIceCreams - action.payload
+            }
+        case iceCreamRestocked:
+            return {
+                ...state,
+                numOfIceCreams: state.numOfIceCreams + action.payload
             }
         default: 
             return state;
@@ -107,9 +136,11 @@ unsubscribe();
 // Bind Action Creators Fxn = A helper fxn that redux provides
 // It is an alternative for the dispatch fxn 
 // bindActionCreators(action creators, and what you want to bind it to) 
-const actions = bindActionCreators({ orderCake, restockCake }, store.dispatch)
+const actions = bindActionCreators({ orderCake, restockCake, orderIceCream, restockIceCream }, store.dispatch)
 actions.orderCake();
 actions.orderCake();
 actions.orderCake();
 actions.restockCake(cakesSold);
+actions.orderIceCream(3);
+actions.restockIceCream(iceCreamSold);
 
