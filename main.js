@@ -2,6 +2,10 @@ const redux = require('redux');
 const createStore = redux.createStore;
 const bindActionCreators = redux.bindActionCreators;
 const combineReducers = redux.combineReducers;
+const applyMiddleware = redux.applyMiddleware;
+
+const reduxLogger = require('redux-logger');
+const logger = reduxLogger.createLogger();
 
 const cakeOrdered = 'Cake Ordered';
 const cakeRestocked = 'Cake Restocked';
@@ -163,7 +167,7 @@ const rootReducer = combineReducers({
 // const store = createStore(reducer);
 
 //Hold Multpile Reducers Baby.. We got the club going crazy.. all eyes on you
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 // Allow access to state 
 console.log('Initial State', store.getState());
@@ -184,7 +188,11 @@ store.subscribe(() => console.log('update state', store.getState()))
 // store.dispatch(restockCake(cakesSold));
 
 // for the unsubscribe method, just call the function that is returned from the subscribe method 
-const unsubscribe = store.subscribe(() => console.log('update state', store.getState()))
+const unsubscribe = store.subscribe(() => {
+    //removing the log update part because of the middleware
+    // console.log('update state', store.getState())
+
+})
 
 unsubscribe();
 

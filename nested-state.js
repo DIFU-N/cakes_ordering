@@ -50,3 +50,4 @@ const unsubscribe = store.subscribe(() => {
 })
 store.dispatch(updateStreet('Nowhere'))
 unsubscribe();
+
