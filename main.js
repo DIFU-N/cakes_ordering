@@ -167,6 +167,7 @@ const rootReducer = combineReducers({
 // const store = createStore(reducer);
 
 //Hold Multpile Reducers Baby.. We got the club going crazy.. all eyes on you
+//logger logs the time for each action
 const store = createStore(rootReducer, applyMiddleware(logger));
 
 // Allow access to state 
@@ -191,7 +192,6 @@ store.subscribe(() => console.log('update state', store.getState()))
 const unsubscribe = store.subscribe(() => {
     //removing the log update part because of the middleware
     // console.log('update state', store.getState())
-
 })
 
 unsubscribe();
